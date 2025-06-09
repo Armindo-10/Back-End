@@ -205,6 +205,14 @@
         },
         "required": ["id", "name", "email", "role"]
       }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Token JWT para autenticação"
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-import type { Request, Response } from 'express'
+import type { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../secrets.js'
 import { prisma } from '../index.js'
@@ -6,7 +6,7 @@ import { prisma } from '../index.js'
 const authMiddleware = async (
   req: Request,
   res: Response,
-  next: () => void
+  next: NextFunction
 ) => {
   const token = req.headers.authorization?.split(' ')[1]
   if (!token) {
