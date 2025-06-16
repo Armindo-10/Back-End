@@ -7,12 +7,12 @@ import swaggerDocuments from '../swagger.json'
 
 const app = express()
 app.use(express.json())
-const port = 3000
+const PORT = 3000
 
 export const prisma = new PrismaClient({})
 app.use('/api', rootRouter)
 app.use('/api-docs', SwaggerUi.serve, SwaggerUi.setup(swaggerDocuments))
 
-app.listen(port, () => {
-  console.log(`server running on port ${port}`)
+app.listen(PORT, () => {
+  console.log(`server running on port ${PORT}`)
 })
