@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../secrets.js'
 import { prisma } from '../index.js'
 
-const authMiddleware = async (
+export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction

@@ -11,8 +11,6 @@ import mongoSanitize from 'express-mongo-sanitize'
 import morgan from 'morgan'
 // @ts-ignore
 import swaggerDocuments from '../swagger.json'
-import productRoute from './routes/productRoute.js'
-import { type } from 'node:os'
 
 const app = express();
 app.use(express.json());
@@ -74,7 +72,6 @@ app.use(morgan('combined'));
 
 export const prisma = new PrismaClient({})
 app.use('/api', rootRouter);
-
 
 
 if (process.env.NODE_ENV === 'development') {

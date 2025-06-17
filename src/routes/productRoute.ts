@@ -1,10 +1,11 @@
-/*import { Router, Request, Response } from 'express';
+import { Router, Request, Response } from 'express';
 import {  PrismaClient } from '@prisma/client';
+import {authMiddleware} from "../middleware/auth.js";
 
 const prisma = new PrismaClient();
 const productRoute = Router();
 
-productRoute.get('/producer/:producerId', async (req: Request, res: Response): Promise<Response> => {
+productRoute.get('/producer/:producerId', authMiddleware, async (req: Request, res: Response) => {
 	const { producerId } = req.params;
 
 	try {
@@ -24,7 +25,7 @@ productRoute.get('/producer/:producerId', async (req: Request, res: Response): P
 });
 
 // Rota para cadastrar novo produto
-productRoute.post('/cadastrar', async (req: Request, res: Response): Promise<Response> => {
+productRoute.post('/cadastrar', authMiddleware, async (req: Request, res: Response) => {
 	const { name, description, price, producerId } = req.body;
 
 	if (!name || !description || !price || !producerId) {
@@ -57,4 +58,3 @@ productRoute.post('/cadastrar', async (req: Request, res: Response): Promise<Res
 });
 
 export default productRoute;
-*/

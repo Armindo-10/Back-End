@@ -6,23 +6,29 @@ import type { Request, Response } from 'express'
 import { SignupSchema } from '../schema/user.js'
 
 export const signup = async (req: Request, res: Response) => {
-  SignupSchema.parse(req.body)
-  const { name, email, password, role } = req.body
+  try {
+    SignupSchema.parse(req.body)
+    const { name, email, password, role } = req.body
 
-  let user = await prisma.user.findFirst({ where: { email } })
-  if (user) {
-    throw Error('Usuário já cadastrado')
+    const userExists = await prisma.user.findFirst({ where: { email } })
+    if (userExists) {
+      return res.status(400).json({ message: 'Usuário já cadastrado' })
+    }
+
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashSync(password, 12),
+        role,
+      },
+    })
+
+    return res.status(201).json(user)
+  } catch (error: any) {
+    console.error('Erro no signup:', error)
+    return res.status(500).json({ message: error.message || 'Erro interno' })
   }
-
-  user = await prisma.user.create({
-    data: {
-      name,
-      email,
-      password: hashSync(password, 12),
-      role,
-    },
-  })
-  res.json(user)
 }
 
 export const login = async (req: Request, res: Response) => {
