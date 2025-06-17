@@ -20,6 +20,10 @@ model User {
   email String @unique
   password String
   role Role @default(USUARIO)
+  createdAt DateTime @default(now()) //monitora quando usuarios foram criados ou atualizados
+  updatedAt DateTime @updatedAt // auditar acoes futuras
+
+  products  Product[] // Relacionamento 1:n com produtos
 
   @@map("users")
 }
@@ -28,4 +32,14 @@ enum Role {
   USUARIO
   PRODUTOR
   CONDUTOR
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  producerId  String
+  producer    User     @relation(fields: [producerId], references: [id])
+  createdAt   DateTime @default(now())
 }

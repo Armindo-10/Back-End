@@ -11,6 +11,7 @@ import mongoSanitize from 'express-mongo-sanitize'
 import morgan from 'morgan'
 // @ts-ignore
 import swaggerDocuments from '../swagger.json'
+import productRoute from './routes/productRoute.js'
 import { type } from 'node:os'
 
 const app = express();
@@ -43,11 +44,14 @@ app.use(cors({
 
 //redirecionando automático de http para https
 app.enable('trust proxy');
-app.use((req, res, next) => {
-  if (req.headers['x-forwarded-proto'] !== 'https')
-    return res.redirect(301, `https://${req.headers.host}${req.url}`)
-  next();
-});
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect(301, `https://${req.headers.host}${req.url}`);
+    }
+    next();
+  });
+}
 
 // sinatização contra xss e injeções
 app.use((req, res, next) => {
@@ -70,6 +74,8 @@ app.use(morgan('combined'));
 
 export const prisma = new PrismaClient({})
 app.use('/api', rootRouter);
+
+
 
 if (process.env.NODE_ENV === 'development') {
   app.use('/api-docs', SwaggerUi.serve, SwaggerUi.setup(swaggerDocuments));
