@@ -23,7 +23,7 @@ app.disable("X-Powered-By"); // desabilitando o framework usado na aplicação p
 
 // proteção contra ataque de força bruta e DDOS(negação de serviço)
 const limit = (rateLimit({
-  windowMs: 15 * 60 * 1000,
+  windowMs: 1 * 60 * 1000,
   max: 100,
   message: 'excedeu o limite de requisições , tente mais tarde'
 }));
@@ -41,8 +41,8 @@ app.use(cors({
 
 
 //redirecionando automático de http para https
-app.enable('trust proxy');
 if (process.env.NODE_ENV === 'production') {
+   app.enable("trust proxy")
   app.use((req, res, next) => {
     if (req.headers['x-forwarded-proto'] !== 'https') {
       return res.redirect(301, `https://${req.headers.host}${req.url}`);
